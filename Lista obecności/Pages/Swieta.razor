@@ -1,0 +1,138 @@
+﻿@page "/swieta"
+
+@using Lista_obecności.Data
+@using Lista_obecności.DTO
+@inject IApplicationManager iApplicationManager
+@inject NavigationManager navigationManager
+
+
+
+<div class="col-12 p-0 m-0" style="background-color:darkorange">
+
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+
+    <header id="headerSwieta" class="h1"> Dni wolne od pracy: </header>
+
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+
+    <section class="container p-0 m-0 col-12 pracownik">
+
+        <div class="col-12 m-0 p-0" style="display:inline-block; position:relative;">
+            <table class="fontSize" id="sections">
+
+                <tr>
+                    <th>Dzień</th>
+                    <th>Miesiąc</th>
+                    <th>Nazwa Święta</th>
+                    <th width="90px"> </th>
+                </tr>
+                @if (freeDays != null)
+                {
+                    //for (int i = 0; i < freeDays.Count; i++)
+                    foreach (var freeDay in freeDays)
+                    {
+                        <tr class="msgRow" onclick="selectRow(this)">
+                            <td>@freeDay.Day </td>
+                            <td>@freeDay.Month </td>
+                            <td>@freeDay.NameOfHoliday </td>
+                            <td>
+                                <a @onclick="@(() => EditFreeDay(@freeDay.Id))" href="/edytujsw/@EditFreeDay(@freeDay.Id)"><i title="Edytuj święto." class="fas fa-pen-alt" id="editdelete"></i></a>
+
+                                <i @onclick="@(() => DeleteFreeDay(@freeDay.Id))" title="Usuń święto." class="fas fa-minus" id="editdelete"></i>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 24; i++)
+                    {
+                        <tr class="msgRow" onclick="selectRow(this)">
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+
+        <div class="col-1 m-0" style="display:inline-block; padding:25px 25px 25px 25px;">
+            <a href="/swieto"><i title="Dodaj święto." class="fas fa-plus" id="dodaj"></i></a>
+        </div>
+
+        <div class="col-1 offset-13" style="display:inline-block;">
+            <a href="/lista"><i title="Wróć do poprzedniej strony." class="fas fa-backward" id="dodaj"></i></a>
+        </div>
+
+    </section>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+@code {
+
+    List<FreeDaysDTO> freeDays;
+
+    protected override void OnInitialized()
+    {
+        AddFreeDay();
+        var free = iApplicationManager.GetAllFreeDays();
+        freeDays = free.OrderBy(x => x.Month).ThenBy(x => x.Day).ToList();
+        // freeDays = iApplicationManager.GetAllFreeDays().ToList();
+    }
+
+    void DeleteFreeDay(int Id)
+    {
+        FreeDaysDTO freeDayDTO = iApplicationManager.GetAllFreeDays().Where(x => x.Id == Id).FirstOrDefault();
+        iApplicationManager.DeleteFreeDay(freeDayDTO);
+        navigationManager.NavigateTo("/swieta", true);
+    }
+
+    void AddFreeDay()
+    {
+        var FREEDAYS = iApplicationManager.GetAllFreeDays();
+        if (FREEDAYS.ToList().Count == 0)
+        {
+            List<FreeDaysDTO> freeDays = new List<FreeDaysDTO>();
+            freeDays.Add(new FreeDaysDTO { Day = 1, Month = 1, NameOfHoliday = "NOWY ROK" });
+            freeDays.Add(new FreeDaysDTO { Day = 6, Month = 1, NameOfHoliday = "ŚWIĘTO TRZECH KRÓLI" });
+            freeDays.Add(new FreeDaysDTO { Day = 1, Month = 5, NameOfHoliday = "ŚWIĘTO PRACY" });
+            freeDays.Add(new FreeDaysDTO { Day = 3, Month = 5, NameOfHoliday = "ŚWIĘTO 3-GO MAJA" });
+            freeDays.Add(new FreeDaysDTO { Day = 15, Month = 8, NameOfHoliday = "WNIEBOWZIĘCIE NAJŚWIĘTSZEJ MARII PANNY" });
+            freeDays.Add(new FreeDaysDTO { Day = 1, Month = 11, NameOfHoliday = "WSZYSTKICH ŚWITYCH" });
+            freeDays.Add(new FreeDaysDTO { Day = 11, Month = 11, NameOfHoliday = "NARODOWE ŚWIĘTO NIEPODLEGŁOŚCI" });
+            freeDays.Add(new FreeDaysDTO { Day = 25, Month = 12, NameOfHoliday = "BOŻE NARODZENIE" });
+            freeDays.Add(new FreeDaysDTO { Day = 26, Month = 12, NameOfHoliday = "DRUGI DZIEŃ BOŻEGO NARODZENIA" });
+            foreach (var freeDay in freeDays)
+            {
+                iApplicationManager.AddNewFreeDays(freeDay);
+            }
+        }
+
+    }
+
+    string IndexOfFreeDayToEdit;
+
+    string EditFreeDay(int IdWorker)
+    {
+        return IndexOfFreeDayToEdit = IdWorker.ToString();
+    }
+}

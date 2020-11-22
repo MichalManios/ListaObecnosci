@@ -1,0 +1,143 @@
+﻿
+
+@page "/dodaj"
+
+@using Lista_obecności.Data
+@using Lista_obecności.DTO
+@inject IApplicationManager iApplicationManager
+@inject NavigationManager navigationManager
+
+
+
+<div class="col-12"><br /></div>
+<div class="col-12"><br /></div>
+<div class="col-12"><br /></div>
+<div class="col-12"><br /></div>
+<div class="col-12"><br /></div>
+
+<header id="pracownik" class="h1"> Dodaj pracownika </header>
+
+<section class="container p-0 m-0 col-12 pracownik">
+
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+
+    <EditForm Model="@worker" style="background-color:transparent">
+        <DataAnnotationsValidator />
+
+        <div class="col-lg-12 col-5 pracownik">
+            <label class="col-lg-4 col-12 offset-lg-2">
+                NAZWISKO:
+            </label>
+
+            <label class="col-lg-4 col-12">
+                IMIĘ:
+            </label>
+
+        </div>
+
+        <div class="col-lg-12 col-6 pracownik">
+            <div class="col-lg-4 offset-lg-3 col-12 pracownik">
+                &nbsp;<ValidationMessage For="@(()=>worker.Surname)" style="text-align:left" />
+                <input type="text" oninput="this.value=this.value.toUpperCase()" @bind="worker.Surname" placeholder=@worker.Surname />
+            </div>
+
+            <div class="col-lg-4 col-12 pracownik">
+                &nbsp;<ValidationMessage For="@(()=>worker.Name)" style="text-align:left" />
+                <input type="text" oninput="this.value=this.value.toUpperCase()" @bind="worker.Name" placeholder=@worker.Name />
+            </div>
+
+        </div>
+
+        <div class="col-12"><br /></div>
+
+        <div class="col-lg-12 col-5 pracownik">
+
+            <div class="col-12"><br /></div>
+
+            <label class="col-lg-4 offset-lg-2 col-12">
+                DZIAŁ:
+            </label>
+
+            <label class="col-lg-4 col-12">
+                KIEROWNIK:
+            </label>
+        </div>
+
+        <div class="col-lg-12 col-6 pracownik">
+            <div class="col-lg-4 offset-lg-2 col-12 pracownik">
+                &nbsp;<ValidationMessage For="@(()=>worker.Section)" style="text-align:center" />
+                <input id="dzial" oninput="this.value=this.value.toUpperCase()" type="text" @bind="worker.Section" placeholder=@worker.Section />
+            </div>
+
+            <div class="col-1 offset-2 pracownik p-0">
+                &nbsp;<ValidationMessage For="@(()=>worker.IsManager)" style="text-align:center" />
+                <input id="checkK" oninput="this.value=this.value.toUpperCase()" type="checkbox" value="unchecked" @bind="worker.IsManager" />
+            </div>
+        </div>
+
+        <div class="col-12 pracownik">
+
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+
+            <button @onclick="AddWorker" type="submit" class="col-lg-3 offset-lg-3 col-5">
+                Dodaj użytkownika
+            </button>
+
+            <button onclick="location.href='/lista';" type="button" class="col-lg-3 col-5">
+                Anuluj dodawanie
+            </button>
+        </div>
+
+    </EditForm>
+
+    <div class="col-12 pracownik">
+
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+
+
+        <label class="autor">Autor: Michał Manios</label>
+    </div>
+
+    <div class="col-12 pracownik">
+        <label class="autor">Wersja: 1.0</label>
+    </div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+@code {
+
+    WorkersDTO worker = new WorkersDTO();
+    void AddWorker()
+    {
+        if (!string.IsNullOrEmpty(worker.Name) &&
+            !string.IsNullOrEmpty(worker.Surname) &&
+            !string.IsNullOrEmpty(worker.Section))
+        {
+            iApplicationManager.AddNewWorker(worker);
+            navigationManager.NavigateTo("/lista");
+        }
+    }
+}

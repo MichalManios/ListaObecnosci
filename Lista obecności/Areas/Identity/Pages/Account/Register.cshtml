@@ -1,0 +1,114 @@
+﻿@page
+@model RegisterModel
+
+
+    <body style=" background-image: linear-gradient(to bottom right, #05163d, #4B0082); padding:0 0 0 0; margin:0 0 0 0;">
+        <div class="row">
+            <div class="col-12"> <br /></div>
+            <div class="col-12"> <br /></div>
+            <div class="col-12"> <br /></div>
+            <div class="col-12"> <br /></div>
+            <div class="col-12"> <br /></div>
+            <div class="col-12"> <br /></div>
+            <div class="col-12"> <br /></div>
+
+            <div class="col-lg-12">
+                <header>
+                    <h1 style="
+                        color: #007bff;
+                        text-align: center;
+                        font-family: Cambria;
+                        text-shadow: 3px 3px 1px black;
+                        letter-spacing: 3px;
+                        ">
+                        Lista obecności
+                    </h1>
+                </header>
+            </div>
+
+            <div class="col-12"> <br /></div>
+            <div class="col-12"> <br /></div>
+            <div class="col-12"> <br /></div>
+
+            <div class="col-lg-8">
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+                    <div class="form-group col-lg-6 offset-6">
+                        <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-lg-12" style="display: flex; justify-content:space-around;">
+                        <label class="col-lg-6" style="font:bold; letter-spacing: 1px; color: #007bff; font:bold; font-family: Cambria;">Nazwa użytkownika:</label>
+                        <input style="font-family: Cambria; text-align: center; background-color: #4a5989; color: #007bff" asp-for="Input.UserName" class="form-control col-lg-6" placeholder="Nazwa użytkownika" />
+                    </div>
+                    <div class="form-group col-lg-6 offset-6">
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-lg-12" style="display: flex; justify-content:space-around;">
+                        <label class="col-lg-6" style="letter-spacing: 1px; font-family: Cambria; font:bold; color: #007bff">Hasło użytkownika:</label>
+                        <input asp-for="Input.Password" style="font-family: Cambria; text-align: center; font:bold; background-color: #4a5989; color: #007bff" type="password" placeholder="Hasło użytkownika" text-allign="center" class="form-control col-lg-6" />
+                    </div>
+                    <div class="form-group col-lg-6 offset-6">
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-lg-12" style="display: flex; justify-content:space-around;">
+                        <label class="col-lg-6" style="letter-spacing: 1px; font-family: Cambria; font:bold; color: #007bff">Powtórz hasło użytkownika:</label>
+                        <input asp-for="Input.ConfirmPassword" style="font-family: Cambria; text-align: center; font:bold; background-color: #4a5989; color: #007bff" type="password" placeholder="Powtórz hasło użytkownika" text-allign="center" class="form-control col-lg-6" />
+                    </div>
+                    <div class="form-group col-lg-6 offset-6">
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-lg-12" style="display: flex; justify-content:space-around;">
+                        <label class="col-lg-6" style="letter-spacing: 1px; font-family: Cambria; font:bold; color: #007bff">Adres email:</label>
+                        <input asp-for="Input.Email" style="font-family: Cambria; text-align: center; font:bold; background-color: #4a5989; color: #007bff" placeholder="Adres email" text-allign="center" class="form-control col-lg-6" />
+                    </div>
+
+                    <div class="col-12"> <br /></div>
+
+                    <div class="form-group col-lg-6 offset-lg-3">
+                        <input type="submit" style="letter-spacing: 1px; font-family: Cambria;" class="form-control col-lg-12 btn btn-outline-primary" value="Utwórz konto" />
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-lg-4">
+                <div class=col-lg-3>
+                    <img src="/Images/Ludek3.png" asp-append-version="true" width="300" height="400" align="left" />
+                </div>
+            </div>
+            <div class="col-md-6 offset-6" style="display: flex; justify-content:flex-end">
+                <p><label style="font:bold; font-family: Cambria; color: #007bff " allign="right">Autor: Michał Manios</label></p>
+            </div>
+            <div class="col-md-6 offset-6" style="display: flex; justify-content:flex-end">
+                <p><label style="font:bold; letter-spacing: 1px; font-family: Cambria; color: #007bff " allign="right">Wersja: 1.0</label></p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-md-offset-2">
+            <section>
+               
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
+            </section>
+        </div>
+    </body>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

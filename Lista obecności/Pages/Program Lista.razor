@@ -1,0 +1,527 @@
+﻿
+@page "/lista"
+
+@using Lista_obecności.Data
+@using Lista_obecności.DTO
+
+@using Lista_obecności
+
+
+
+@inject IApplicationManager iApplicationManager
+@inject NavigationManager navigationManager
+
+
+
+        <section class="p-0 m-0 col-12">
+            <div class="container p-0 m-0 col-12">
+                <div class="row p-0 m-0 col-12">
+
+                    <div class="col-xl-6 p-0 m-0" style="display:inline-block; background-color:darkorange;">
+
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+
+                        <div class="col-4 m-0 p-0" style="display:inline-block; position:relative; left:10px; top:10px;">
+                            <p><label class="fontSize" style="font-size:24px; font-family:Cambria; color: darkkhaki; text-shadow: 2px 2px 4px #000000; ">Lista osób z działu:</label></p>
+                        </div>
+
+                        <div class="col-6 m-0 p-0" style="display:inline-block; position:relative; left:20px; top:10px;">
+                            <select @onchange=@ChangeSection class="select" style="
+                                    background-color:crimson;
+                                    color:blanchedalmond;
+                                     text-align-last:center;
+                                     -webkit-appearance: none;
+                                     -moz-appearance: none;">
+                                >
+                                @for (int i = 0; i < sections.Count; i++)
+                                {
+                                    <option value=@i>@sections[i]</option>
+                                }
+
+                            </select>
+                        </div>
+
+                        @if (printAllSection == false)
+                        {
+                            <div class="col-1 p-0" style="display:inline-block; position:relative; top:20px; left:30px;">
+                                <i @onclick="@ChangeStateOfPrinting" class="fas fa-lock" title="Drukuj tylko wybrany dział." id="dodaj"></i>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-1 p-0" style="display:inline-block; position:relative; top:20px; left:30px;">
+                                <i @onclick="@ChangeStateOfPrinting" class="fas fa-lock-open" title="Drukuj wszystkie działy." id="dodaj"></i>
+                            </div>
+                        }
+
+
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+
+                        <div class="col-12 m-0 p-0" style="display:inline-block; position:relative;">
+                            <table class="fontSize" id="sections">
+
+                                <tr>
+
+                                    <th>Nazwisko</th>
+                                    <th>Imię</th>
+                                    <th width="100px">Kierownik</th>
+                                    <th width="85px"> </th>
+                                </tr>
+                                @if (workers != null)
+                                {
+                                    foreach (var worker in workers)
+                                    {
+                                        if (sections.Count > 0)
+                                        {
+                                            if (!string.IsNullOrEmpty(worker.Surname))
+                                            {
+                                                <tr class="msgRow" onclick="selectRow(this)">
+
+                                                    <td>@worker.Surname</td>
+                                                    <td>@worker.Name</td>
+
+                                                    @if (worker.IsManager)
+                                                    {
+                                                        <td>Kierownik</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>Nie</td>
+                                                    }
+
+
+                                                    <td>
+                                                        <a @onclick="@(() => EditWorker(@worker.Id))" href="/edytuj/@EditWorker(@worker.Id)"><i title="Edytuj wskazanego użytkownika." class="fas fa-user-edit" id="editdelete"></i></a>
+                                                        <i @onclick="@(() => DeleteWorker(@worker.Id))" title="Usuń wskazanego użytkownika." class="fas fa-user-minus" id="editdelete"></i>
+                                                    </td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                <tr class="msgRow" onclick="selectRow(this)">
+                                                    <td> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                </tr>
+                                            }
+                                        }
+
+                                        i++;
+                                    }
+                                }
+                                else
+                                {
+                                    for (int a = 0; a < 24; a++)
+                                    {
+
+                                        <tr class="msgRow" onclick="selectRow(this)">
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                            <td> </td>
+                                        </tr>
+                                    }
+                                }
+
+
+
+
+                            </table>
+                        </div>
+
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+
+                        <div class="col-1 m-0" style="display:inline-block; padding:25px 25px 25px 25px;">
+                            <a href="/dodaj"><i title="Dodaj użytkownika." class="fas fa-user-plus" id="dodaj"></i></a>
+                        </div>
+
+                        <div class="col-1 offset-4" style="display:inline-block;">
+
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="col-xl-6 p-0 m-0" style="display: inline-block; background-color: #f0e68c;">
+
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+
+                        <div class="col-5 m-0 p-3" style="display:inline-block;">
+                            <label class="col-form-label fontSize"
+                                   style="font-family: Cambria;
+                                   font-size: 24px;
+                                   font: bold;
+                                   color: white;
+                                   text-shadow: 2px 2px 4px #000000;">
+                                Dziś: @DateTime.Now.ToShortDateString() r.
+                            </label>
+                        </div>
+
+                        <div class="col-3 m-0 p-0" style="display:inline-block;">
+                            <div class="select" style="
+                                  text-align-last:center;
+                                 -webkit-appearance: none;
+                                 -moz-appearance: none;">
+                                <select name="Month" @onchange=@CalendarMonth id="Month" value="@iSetMonth">
+                                    <option value="0">STYCZEŃ</option>
+                                    <option value="1">LUTY</option>
+                                    <option value="2">MARZEC</option>
+                                    <option value="3">KWIECIEŃ</option>
+                                    <option value="4">MAJ</option>
+                                    <option value="5">CZERWIEC</option>
+                                    <option value="6">LIPIEC</option>
+                                    <option value="7">SIERPIEŃ</option>
+                                    <option value="8">WRZESIEŃ</option>
+                                    <option value="9">PAŹDZIERNIK</option>
+                                    <option value="10">LISTOPAD</option>
+                                    <option value="11">GRUDZIEŃ</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-3 m-0 p-0" style="display:inline-block; position:relative; left:25px;">
+                            <div class="select" style="
+                             text-align-last:center;
+                             -webkit-appearance: none;
+                             -moz-appearance: none;">
+                                <select name="Year" @onchange=@CalendarYear id="Year" value="@iSetYear">
+                                    @for (int i = 0; i < 100; i++)
+                                    {
+                                        int a = 2020 + i;
+                                        <option value=@i>@a</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+                        <div class="col-12"> <br /> </div>
+
+                        <div class="col-12 m-0 p-0" style="display:inline-block;">
+                            <div class="month">
+                                <ul>
+                                    <li id="printMonth">@SetCalendarMonth()</li>
+                                    @if (string.IsNullOrEmpty(year))
+                                    {
+                                        <li id="printYear">@(iSetYear + 2020)</li>
+                                    }
+                                    else
+                                    {
+                                        <li id="printYear">@year</li>
+                                    }
+                                </ul>
+                            </div>
+
+                            <ul class="weekdays">
+                                <li>PON</li>
+                                <li>WTO</li>
+                                <li>ŚRO</li>
+                                <li>CZW</li>
+                                <li>PIĄ</li>
+                                <li style="color:red">SOB</li>
+                                <li style="color:red">NIE</li>
+                            </ul>
+
+                            <ul class="days" id="days">
+
+                                @{
+                                    iStartDating = DrawCalendar();
+                                    int x = 1;
+                                    int s = 0;
+                                    iRedDays.Clear();
+
+                                    @for (int i = 1; i < 43; i++)
+                                    {
+                                        s++;
+                                        if (iStartDating <= i && x <= iDayInMonth)
+                                        {
+                                            if (HolidayDay != null)
+                                                foreach (var holiday in HolidayDay)
+                                                {
+                                                    if (x == holiday)
+                                                    {
+                                                        iRedDays.Add(x);
+                                                        <li style="color:red;">@x</li>
+                                                        goto end;
+                                                    }
+                                                }
+                                            if (s == 6 || s == 7)
+                                            {
+                                                iRedDays.Add(x);
+                                                <li style="color:red;">@x</li>
+                                            }
+
+                                            else
+                                            {
+                                                <li style="color:gray;">@x</li>
+                                            }
+                                        end:
+                                            x++;
+                                        }
+                                        else
+                                        {
+                                            <li style="color:gray;"></li>
+                                        }
+                                        if (s == 7)
+                                        {
+                                            s = 0;
+                                        }
+                                    }
+                                }
+                            </ul>
+                        </div>
+
+                        <div class="col12"> <br /> </div>
+                        <div class="col12"> <br /> </div>
+                        <div class="col12"> <br /> </div>
+                        <div class="col12"> <br /> </div>
+
+                        <div class="col-3 m-0 p-0" style="display:inline-block;">
+                            @if (printAllSection == false)
+                            {
+                                if (workers == null) { }
+                                else
+                                {
+                                    <button @onclick="@(() => print.PrintPDF(@workers, SelectedSection, month, year, printAllSection, sections, iRedDays))" class="print-button"><span title="Drukuj." class="print-icon"></span></button>
+                                }
+                            }
+                            else
+                            {
+                                if (workers == null) { }
+                                else
+                                {
+                                    <button @onclick="@(() => print.PrintPDF(GetAllWorkers(), SelectedSection, month, year, printAllSection, sections, iRedDays))" class="print-button"><span title="Drukuj." class="print-icon"></span></button>
+                                }
+                            }
+                        </div>
+
+                        @if (print.RedirectToPDF) navigationManager.NavigateTo("http://localhost/ListaObecnosci.pdf");
+
+                        <div class="col-3 m-0 p-0" style="display:inline-block; position:absolute;">
+                            <button onclick="location.href='/swieta';" class="calendar" title="Przejdź do listy świąt." style="display:inline-block; background-color:red; position:relative; top:0; left:0;">@DateTime.Now.Day <em>@SetCalendarMonth()</em></button>
+                        </div>
+
+                        <div class="col-4 m-0 p-0" style="display:inline-block; position:absolute; right:0; text-align:right;">
+                            <p><label class="col-12" style="font-family: Cambria; color: white; text-shadow: 2px 2px 4px #000000; position:relative;">Autor: Michał Manios</label></p>
+                            <p><label class="col-12" style="letter-spacing: 1px; font-family: Cambria; color: white; text-shadow: 2px 2px 4px #000000; position:relative;">Wersja: 1.0</label></p>
+                        </div>
+
+                        <div class="col12"> <br /> </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+@code {
+
+
+    List<int> iRedDays = new List<int>();
+
+    int iSetMonth = DateTime.Now.Month - 1;
+    int iSetYear = DateTime.Now.Year - 2020;
+
+    string SetCalendarMonth()
+    {
+        string sMonth = "";
+        if (string.IsNullOrEmpty(month)) month = DateTime.Now.Month.ToString();
+        switch (Convert.ToInt32(month))
+        {
+
+            case 1: sMonth = "STYCZEŃ"; break;
+            case 2: sMonth = "LUTY"; break;
+            case 3: sMonth = "MARZEC"; break;
+            case 4: sMonth = "KWIECIEŃ"; break;
+            case 5: sMonth = "MAJ"; break;
+            case 6: sMonth = "CZERWIEC"; break;
+            case 7: sMonth = "LIPIEC"; break;
+            case 8: sMonth = "SIERPIEŃ"; break;
+            case 9: sMonth = "WRZESIEŃ"; break;
+            case 10: sMonth = "PAŹDZiERNIK"; break;
+            case 11: sMonth = "LISTOPAD"; break;
+            case 12: sMonth = "GRUDZIEŃ"; break;
+        }
+        return sMonth;
+    }
+
+    int iStartDating = 0;
+    int iDayInMonth = 0;
+
+    int DrawCalendar()
+    {
+        int Month;
+        int Year;
+        if (string.IsNullOrEmpty(month)) Month = DateTime.Today.Month;
+        else Month = Convert.ToInt32(month);
+        if (string.IsNullOrEmpty(year)) Year = DateTime.Today.Year;
+        else Year = Convert.ToInt32(year);
+        var firstDayOfMonth = new DateTime(Year, Month, 1);
+        string sDayOfWeek = firstDayOfMonth.DayOfWeek.ToString();
+        int iStartDating = 0;
+
+        if (sDayOfWeek == "Monday") iStartDating = 1;
+        if (sDayOfWeek == "Tuesday") iStartDating = 2;
+        if (sDayOfWeek == "Wednesday") iStartDating = 3;
+        if (sDayOfWeek == "Thursday") iStartDating = 4;
+        if (sDayOfWeek == "Friday") iStartDating = 5;
+        if (sDayOfWeek == "Saturday") iStartDating = 6;
+        if (sDayOfWeek == "Sunday") iStartDating = 7;
+
+        iDayInMonth = DateTime.DaysInMonth(Year, Month);
+
+        return iStartDating;
+    }
+
+    List<string> sections;
+
+    List<WorkersDTO> workers, allWorkers;
+    int i = 0;
+
+    List<FreeDaysDTO> freeDays;
+
+    void GetFreeDays()
+    {
+        var free = iApplicationManager.GetAllFreeDays();
+        freeDays = free.OrderBy(x => x.Month).ThenBy(x => x.Day).ToList();
+    }
+
+
+    int y;
+    int count = 16;
+
+    protected override void OnInitialized()
+    {
+        GetFreeDays();
+        sections = iApplicationManager.GetAllSectionOfWorkers().OrderBy(x => x).ToList();
+        if (sections.Count > 0)
+        {
+            if (string.IsNullOrEmpty(SelectedSection))
+            {
+                SelectedSection = sections[0];
+            }
+
+            workers = iApplicationManager.GetAllWorkers(SelectedSection).OrderByDescending(x => x.IsManager).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+            y = workers.Count;
+            if (workers.Count < 16) y = 16 - y;
+            count = workers.Count;
+            DrawEmptyRowsInWorkersTable();
+        }
+        else y = 16;
+    }
+
+    void DeleteWorker(int Id)
+    {
+        WorkersDTO workersDTO = iApplicationManager.GetAllWorkers(null).Where(x => x.Id == Id).FirstOrDefault();
+        iApplicationManager.DeleteWorker(workersDTO);
+        navigationManager.NavigateTo("/lista", true);
+    }
+
+    void DrawEmptyRowsInWorkersTable()
+    {
+        y = workers.Count;
+        if (workers.Count < 16)
+        {
+            y = 16 - y;
+            for (int i = 0; i < y; i++)
+            {
+                workers.Add(new WorkersDTO
+                {
+                    Name = "",
+                    Section = "",
+                    Surname = ""
+                });
+
+            }
+        }
+    }
+
+    string SelectedSection = "";
+    void ChangeSection(ChangeEventArgs e)
+    {
+        var index = e.Value.ToString();
+        SelectedSection = sections[Convert.ToInt32(index)];
+        //workers = iApplicationManager.GetAllWorkers(SelectedSection).ToList();
+        workers = iApplicationManager.GetAllWorkers(SelectedSection).OrderByDescending(x => x.IsManager).ThenBy(x => x.Surname).ThenBy(x => x.Name).ToList();
+        DrawEmptyRowsInWorkersTable();
+    }
+
+    List<int> HolidayDay = new List<int>();
+    string month = "";
+    string year = "";
+    void CalendarMonth(ChangeEventArgs e)
+    {
+        HolidayDay.Clear();
+        month = (Convert.ToInt32(e.Value) + 1).ToString();
+        if (freeDays != null)
+            foreach (var freeDay in freeDays)
+            {
+                if (freeDay.Month.ToString() == month) HolidayDay.Add(freeDay.Day);
+            }
+        DrawEmptyRowsInWorkersTable();
+    }
+
+    void CalendarYear(ChangeEventArgs e)
+    {
+
+        year = (Convert.ToInt32(e.Value) + 2020).ToString();
+        DrawEmptyRowsInWorkersTable();
+    }
+
+    string IndexOfWorkerToEdit;
+
+    string EditWorker(int IdWorker)
+    {
+        return IndexOfWorkerToEdit = IdWorker.ToString();
+    }
+
+    bool printAllSection = false;
+
+    void ChangeStateOfPrinting()
+    {
+        if (printAllSection == false) printAllSection = true;
+        else printAllSection = false;
+    }
+
+    Print print = new Print();
+
+    List<WorkersDTO> GetAllWorkers()
+    {
+        return allWorkers = iApplicationManager.GetAllWorkers(null).ToList();
+    }
+
+    //ze 111
+    /*if (i == count - 1)
+                                        {
+
+                                            for (int a = 0; a < y; a++)
+                                            {
+
+                                                <tr class="msgRow" onclick="selectRow(this)">
+                                                    <td> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                </tr>
+                                            }
+
+
+                                        }
+    */
+}

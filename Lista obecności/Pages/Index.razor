@@ -1,0 +1,286 @@
+﻿@inject IApplicationManager iApplicationManager
+@using System.Threading.Tasks;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> _signInManager
+@inject UserManager<IdentityUser> _userManager
+@inject RoleManager<IdentityRole> _roleManager
+@using Lista_obecności.Data
+@using Lista_obecności.DTO
+@layout Indexlayout
+
+
+
+@page "/"
+
+
+    <body onload="DiplayClock(); setInterval('DiplayClock()', 1000);">
+
+        <div class="container col-12">
+
+            <header>
+                <h1 style="
+                        color: #007bff;
+                        text-align: center;
+                        font-family: Cambria;
+                        text-shadow: 3px 3px 1px black;
+                        letter-spacing: 3px;
+                        ">
+                    Lista obecności
+                </h1>
+            </header>
+
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+
+
+            <div class="row form-group col-lg-12">
+                <div class="col-lg-6">
+                    <div>
+                        <img id="photo" src="/Images/unnamed.png" asp-append-version="true" width="300" align="right" />
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <AuthorizeView>
+                        <NotAuthorized>
+                            <div class="form-group col-lg-6 offset-lg-3">
+                                <input onclick="location.href='/Identity/Account/Login';" type="submit" style="letter-spacing: 1px; font-family: Cambria;" class="form-control col-lg-12 btn btn-outline-primary" value="Zaloguj" />
+                            </div>
+
+                            <div class="col-lg-6 offset-lg-3">
+                                <input onclick="location.href='/Identity/Account/Register';" type="submit" style="letter-spacing: 1px; font-family: Cambria;" class="form-control col-lg-12 btn btn-outline-primary" value="Załóż konto" />
+                            </div>
+                        </NotAuthorized>
+                        <Authorized>
+                            <br />
+                            <div class="form-group col-lg-6 offset-lg-3">
+                                <form method="post" action="Identity/Account/Logout">
+                                    <input type="submit" style="letter-spacing: 1px; font-family: Cambria;" class="form-control col-lg-12 btn btn-outline-primary" value="Wyloguj się" />
+                                </form>
+                            </div>
+                        </Authorized>
+                    </AuthorizeView>
+                </div>
+                <div class="col-lg-1" id="line1">
+                    <div id="line"></div>
+                </div>
+
+
+
+                <div class="col-lg-5">
+
+                    <div class="month offset-2 col-8" style="display:inline-block; border-radius:50px; background:#663166">
+                        <ul>
+                            <li id="printMonth"> <span id="clock">&nbsp;</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-12"><br /></div>
+                    <div class="col-12"><br /></div>
+                    <div class="col-12"><br /></div>
+
+                    <div class="col-12 m-0 p-0" style="display:inline-block;">
+                        <div class="month" style="background:#663166">
+                            <ul>
+                                <li id="printMonth">@Date</li>
+                                <li id="printYear">@DateTime.Today.Year</li>
+                            </ul>
+                        </div>
+
+                        <ul class="weekdays">
+                            <li>PON</li>
+                            <li>WTO</li>
+                            <li>ŚRO</li>
+                            <li>CZW</li>
+                            <li>PIĄ</li>
+                            <li style="color:red">SOB</li>
+                            <li style="color:red">NIE</li>
+                        </ul>
+
+                        <ul class="days" id="days">
+
+                            @{
+                                iStartDating = DrawCalendar();
+                                int x = 1;
+                                int s = 0;
+                                iRedDays.Clear();
+
+                                @for (int i = 1; i < 43; i++)
+                                {
+                                    s++;
+                                    if (iStartDating <= i && x <= iDayInMonth)
+                                    {
+                                        if (HolidayDay != null)
+                                            foreach (var holiday in HolidayDay)
+                                            {
+                                                if (x == holiday && x == DateTime.Today.Day)
+                                                {
+                                                    <li style="color:red;background:lightgray; border-radius:25px;">@x</li>
+                                                    goto end;
+                                                }
+                                                else if (x == holiday)
+                                                {
+                                                    iRedDays.Add(x);
+                                                    <li style="color:red;">@x</li>
+                                                    goto end;
+                                                }
+
+                                            }
+                                        if ((s == 6 || s == 7) && x == DateTime.Today.Day)
+                                        {
+                                            <li style="color:red;background:lightgray; border-radius:25px;">@x</li>
+                                        }
+                                        else if (s == 6 || s == 7)
+                                        {
+                                            iRedDays.Add(x);
+                                            <li style="color:red;">@x</li>
+                                        }
+                                        else if (x == DateTime.Today.Day)
+                                        {
+                                            <li style="background:lightgray; border-radius:25px;">@x</li>
+                                        }
+                                        else
+                                        {
+                                            <li style="color:gray;">@x</li>
+                                        }
+                                    end:
+
+                                        x++;
+                                    }
+                                    else
+                                    {
+                                        <li style="color:gray;"></li>
+                                    }
+                                    if (s == 7)
+                                    {
+                                        s = 0;
+                                    }
+                                }
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="col-12"><br /></div>
+                    <div class="col-12"><br /></div>
+
+
+                    <div class="col-12 m-0 p-0" style="display:inline-block; position:absolute; right:0; text-align:right;">
+                        <p><label class="col-12" style="font-family: Cambria; color: white; text-shadow: 2px 2px 4px #000000; position:relative;">Autor: Michał Manios</label></p>
+                        <p><label class="col-12" style="letter-spacing: 1px; font-family: Cambria; color: white; text-shadow: 2px 2px 4px #000000; position:relative;">Wersja: 1.0</label></p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </body>
+
+
+
+@code {
+        int iStartDating = 0;
+        int iDayInMonth = 0;
+        List<int> iRedDays = new List<int>();
+        List<int> HolidayDay = new List<int>();
+        string Date = "";
+        List<FreeDaysDTO> freeDays = new List<FreeDaysDTO>();
+
+        async Task CreateAdminAccount()
+        {
+            Roles roles = new Roles();
+            var user = await _userManager.FindByNameAsync("Admin");
+            if (user == null)
+            {
+                var userAdmin = new IdentityUser { UserName = "Admin", Email = "dil_as@sw.gov.pl" };
+                var result = await _userManager.CreateAsync(userAdmin, "Admin123!");
+
+                var RoleResult = await _roleManager.FindByNameAsync(roles.Admin);
+                if (RoleResult == null)
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(roles.Admin));
+                }
+                await _userManager.AddToRoleAsync(userAdmin, roles.Admin);
+            }
+        }
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Date = DateTime.Today.Day.ToString() + " " + SetCalendarMonth();
+        GetFreeDays();
+        SetHolidayDay();
+        await CreateAdminAccount();
+    }
+
+    int DrawCalendar()
+    {
+        int Month;
+        int Year;
+        Month = DateTime.Today.Month;
+        Year = DateTime.Today.Year;
+
+        var firstDayOfMonth = new DateTime(Year, Month, 1);
+        string sDayOfWeek = firstDayOfMonth.DayOfWeek.ToString();
+        int iStartDating = 0;
+
+        if (sDayOfWeek == "Monday") iStartDating = 1;
+        if (sDayOfWeek == "Tuesday") iStartDating = 2;
+        if (sDayOfWeek == "Wednesday") iStartDating = 3;
+        if (sDayOfWeek == "Thursday") iStartDating = 4;
+        if (sDayOfWeek == "Friday") iStartDating = 5;
+        if (sDayOfWeek == "Saturday") iStartDating = 6;
+        if (sDayOfWeek == "Sunday") iStartDating = 7;
+
+        iDayInMonth = DateTime.DaysInMonth(Year, Month);
+
+        return iStartDating;
+    }
+
+    string SetCalendarMonth()
+    {
+        string sMonth = "";
+
+        var month = DateTime.Now.Month.ToString();
+        switch (Convert.ToInt32(month))
+        {
+
+            case 1: sMonth = "STYCZEŃ"; break;
+            case 2: sMonth = "LUTY"; break;
+            case 3: sMonth = "MARZEC"; break;
+            case 4: sMonth = "KWIECIEŃ"; break;
+            case 5: sMonth = "MAJ"; break;
+            case 6: sMonth = "CZERWIEC"; break;
+            case 7: sMonth = "LIPIEC"; break;
+            case 8: sMonth = "SIERPIEŃ"; break;
+            case 9: sMonth = "WRZESIEŃ"; break;
+            case 10: sMonth = "PAŹDZiERNIK"; break;
+            case 11: sMonth = "LISTOPAD"; break;
+            case 12: sMonth = "GRUDZIEŃ"; break;
+        }
+        return sMonth;
+    }
+
+    void GetFreeDays()
+    {
+        var free = iApplicationManager.GetAllFreeDays();
+        freeDays = free.OrderBy(x => x.Month).ThenBy(x => x.Day).ToList();
+    }
+
+    void SetHolidayDay()
+    {
+        HolidayDay.Clear();
+        var month = DateTime.Today.Month.ToString();
+        if (freeDays != null)
+            foreach (var freeDay in freeDays)
+            {
+                if (freeDay.Month.ToString() == month) HolidayDay.Add(freeDay.Day);
+            }
+    }
+}
+

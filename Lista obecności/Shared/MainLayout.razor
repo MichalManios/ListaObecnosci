@@ -1,0 +1,47 @@
+﻿@inherits LayoutComponentBase
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="top-row px-4 auth" style=" background-color: #660066">
+        <LoginDisplay />
+    </div>
+
+    <div class="content px-4">
+        <AuthorizeView  Roles="admin, user">
+            <Authorized>
+                @Body
+            </Authorized>
+        <NotAuthorized>
+            <div class="form-group col-lg-12">
+                <br />
+            </div>
+            <div class="form-group col-lg-12">
+                <br />
+            </div>
+            <div class="form-group col-lg-12">
+                <br />
+            </div>
+            <div class="form-group col-lg-12">
+                <img class="col-4 offset-4" src="/Images/alert-icon-red-11.png" asp-append-version="true" width="300" align="middle" />
+            </div>
+            <div class="form-group col-lg-12">
+                <br />
+            </div>
+            <div>
+                <h1 style="
+                        color: #007bff;
+                        text-align: center;
+                        font-family: Cambria;
+                        text-shadow: 3px 3px 1px black;
+                        letter-spacing: 3px;
+                        ">
+                    NIE MASZ ODPOWIEDNICH UPRAWNIEŃ DO WYŚWIETLANIA ZAWARTOŚCI TEJ STRONY!!!
+                </h1>
+            </div>
+        </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</div>

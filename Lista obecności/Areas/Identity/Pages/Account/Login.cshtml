@@ -1,0 +1,103 @@
+﻿@page
+@model LoginModel
+
+    <body style=" background-image:linear-gradient(to bottom right, #05163d, #4B0082); padding:0 0 0 0; margin:0 0 0 0;" class="col-12">
+        <div class="row">
+            <div class="col-lg-8">
+                <section>
+                    <form id="account" method="post">
+
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <header>
+                            <h1 style="
+                        color: #007bff;
+                        text-align: center;
+                        font-family: Cambria;
+                        text-shadow: 3px 3px 1px black;
+                        letter-spacing: 3px;
+                        ">
+                                Lista obecności
+                            </h1>
+                        </header>
+
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+
+                        <div class="form-group col-lg-6 offset-6">
+                            <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-lg-12" style="display: flex; justify-content:space-around;">
+                            <label class="col-lg-6" style="font:bold; letter-spacing: 1px; color: #007bff; font:bold; font-family: Cambria;">Nazwa użytkownika:</label>
+                            <input style="font-family: Cambria; text-align: center; background-color: #4a5989; color: #007bff" asp-for="Input.UserName" class="form-control col-lg-6" placeholder="Nazwa użytkownika" />
+                        </div>
+                        <br />
+                        <div class="form-group col-lg-6 offset-6">
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-lg-12" style="display: flex; justify-content:space-around;">
+                            <label class="col-lg-6" style="letter-spacing: 1px; font-family: Cambria; font:bold; color: #007bff">Hasło użytkownika:</label>
+                            <input asp-for="Input.Password" style="font-family: Cambria; text-align: center; font:bold; background-color: #4a5989; color: #007bff" type="password" placeholder="Hasło użytkownika" text-allign="center" class="form-control col-lg-6" />
+                        </div>
+
+                        <div class="col-lg-12">
+                            <br />
+                        </div>
+
+                        <div class="col-lg-12">
+                            <br />
+                        </div>
+
+                        <div class="col-lg-12">
+                            <br />
+                        </div>
+
+                        <div class="form-group col-lg-6 offset-lg-3">
+                            <input type="submit" style="letter-spacing: 1px; font-family: Cambria;" class="form-control col-lg-12 btn btn-outline-primary" value="Zaloguj" />
+                        </div>
+
+                        <div class="col-lg-6 offset-lg-3">
+                            <input onclick="location.href='/Identity/Account/Register';" type="submit" style="letter-spacing: 1px; font-family: Cambria;" class="form-control col-lg-12 btn btn-outline-primary" value="Załóż konto" />
+                        </div>
+
+                        <br />
+
+                        <div class="col-lg-6 offset-lg-3">
+                            <input type="submit" style="letter-spacing: 1px; font-family: Cambria;" class="form-control col-lg-12 btn btn-outline-primary" value="Przypomnij hasło" />
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <div class="col-lg-4">
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <div>
+                    <img src="/Images/Lista2.png" asp-append-version="true" width="300" align="right" />
+                </div>
+            </div>
+
+            <div class="col-md-6 offset-6" style="display: flex; justify-content:flex-end">
+                <p><label style="font-family: Cambria; color: #007bff " allign="right">Autor: Michał Manios</label></p>
+            </div>
+            <div class="col-md-6 offset-6" style="display: flex; justify-content:flex-end">
+                <p><label style="letter-spacing: 1px; font-family: Cambria; color: #007bff " allign="right">Wersja: 1.0</label></p>
+            </div>
+
+        </div>
+    </body>
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+        }

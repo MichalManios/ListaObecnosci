@@ -1,0 +1,129 @@
+﻿@page "/swieto"
+
+@using Lista_obecności.Data
+@using Lista_obecności.Data
+@using Lista_obecności.DTO
+@inject IApplicationManager iApplicationManager
+@inject NavigationManager navigationManager
+
+<div class="col-12"><br /></div>
+<div class="col-12"><br /></div>
+<div class="col-12"><br /></div>
+<div class="col-12"><br /></div>
+<div class="col-12"><br /></div>
+
+<header id="pracownik" class="h1"> Dodaj święto </header>
+
+<section class="container p-0 m-0 col-12 pracownik" style="text-align:center;">
+
+
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+    <div class="col-12"><br /></div>
+
+    <EditForm Model="@freeDay" style="background-color:transparent">
+        <DataAnnotationsValidator />
+        <div class="col-lg-12 col-5 pracownik" style="display:inline-block;">
+            <label class="col-lg-4 col-12">
+                Dzień:
+            </label>
+
+            <label class="col-lg-4 col-12">
+                Miesiąc:
+            </label>
+
+        </div>
+
+        <div class="col-lg-12 col-6 pracownik" style="display:inline-block;">
+            <div class="col-lg-4 col-12 pracownik" style="display:inline-block;">
+                &nbsp;<ValidationMessage For="@(()=>freeDay.Day)" style="text-align:left" />
+                <input min="1" max="31" type="number" oninput="this.value=this.value.toUpperCase()" @bind="freeDay.Day" placeholder=@freeDay.Day />
+            </div>
+
+            <div class="col-lg-4 col-12 pracownik" style="display:inline-block;">
+                &nbsp;<ValidationMessage For="@(()=>freeDay.Month)" style="text-align:left" />
+                <input min="1" max="12" type="number" oninput="this.value=this.value.toUpperCase()" @bind="freeDay.Month" placeholder=@freeDay.Month />
+            </div>
+
+        </div>
+
+        <div class="col-12"><br /></div>
+
+        <div class="col-lg-12 col-5 pracownik" style="display:inline-block;">
+
+            <div class="col-12"><br /></div>
+
+            <label class="col-lg-4 col-12">
+                Nazwa święta:
+            </label>
+        </div>
+
+        <div class="col-lg-12 col-6 pracownik" style="display:inline-block;">
+            <div class="col-lg-4 col-12 pracownik">
+                &nbsp;<ValidationMessage For="@(()=>freeDay.NameOfHoliday)" style="text-align:left" />
+                <input type="text" oninput="this.value=this.value.toUpperCase()" @bind="freeDay.NameOfHoliday" placeholder=@freeDay.NameOfHoliday />
+            </div>
+        </div>
+
+        <div class="col-12 pracownik" style="display:inline-block;">
+
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+
+            <button @onclick="AddFreeDay" type="submit" class="col-lg-3 col-5">
+                Dodaj święto
+            </button>
+
+            <button onclick="location.href='/swieta';" type="button" class="col-lg-3 col-5">
+                Anuluj dodawanie
+            </button>
+        </div>
+    </EditForm>
+
+    <div class="col-12 pracownik">
+
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+
+        <label class="autor">Autor: Michał Manios</label>
+    </div>
+
+    <div class="col-12 pracownik">
+        <label class="autor">Wersja: 1.0</label>
+    </div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+@code {
+
+    FreeDaysDTO freeDay = new FreeDaysDTO();
+    void AddFreeDay()
+    {
+        if (!string.IsNullOrEmpty(freeDay.Day.ToString()) &&
+            !string.IsNullOrEmpty(freeDay.Day.ToString()) &&
+            !string.IsNullOrEmpty(freeDay.NameOfHoliday))
+        {
+            iApplicationManager.AddNewFreeDays(freeDay);
+            navigationManager.NavigateTo("/lista");
+        }
+    }
+}
+

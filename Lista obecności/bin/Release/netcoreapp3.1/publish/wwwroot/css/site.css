@@ -1,0 +1,784 @@
+@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+
+.selector-for-some-widget {
+    box-sizing: content-box;
+}
+
+html, body, section {
+    /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+    font-family: Cambria;
+    padding:0 0 0 0;
+    margin:0 0 0 0;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+}
+
+
+
+.fill {
+    min-height: 100%;
+}
+
+a, .btn-link {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+app {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-row {
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+
+
+.main {
+    flex: 1;
+}
+
+    .main .top-row {
+        background-color: #f7f7f7;
+        border-bottom: 1px solid #d6d5d5;
+        justify-content: flex-end;
+    }
+
+        .main .top-row > a, .main .top-row .btn-link {
+            white-space: nowrap;
+            margin-left: 1.5rem;
+        }
+
+.main .top-row a:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+}
+
+    .sidebar .top-row {
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .sidebar .navbar-brand {
+        font-size: 1.1rem;
+    }
+
+    .sidebar .oi {
+        width: 2rem;
+        font-size: 1.1rem;
+        vertical-align: text-top;
+        top: -2px;
+    }
+
+    .sidebar .fa {
+        width: 2rem;
+        font-size: 1.1rem;
+        vertical-align: text-top;
+        top: -2px;
+    }
+
+    .sidebar .nav-item {
+        font-size: 0.9rem;
+        padding-bottom: 0.5rem;
+    }
+
+        .sidebar .nav-item:first-of-type {
+            padding-top: 1rem;
+        }
+
+        .sidebar .nav-item:last-of-type {
+            padding-bottom: 1rem;
+        }
+
+        .sidebar .nav-item a {
+            color: #d7d7d7;
+            border-radius: 4px;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            line-height: 3rem;
+        }
+
+            .sidebar .nav-item a.active {
+                background-color: rgba(255,255,255,0.25);
+                color: white;
+            }
+
+            .sidebar .nav-item a:hover {
+                background-color: rgba(255,255,255,0.1);
+                color: white;
+            }
+
+.content {
+    padding-top: 1.1rem;
+}
+
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+@media (max-width: 767.98px) {
+    .main .top-row:not(.auth) {
+        display: none;
+    }
+
+    .main .top-row.auth {
+        justify-content: space-between;
+    }
+
+    .main .top-row a, .main .top-row .btn-link {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 1200px) {
+
+    .containerII {
+        width: calc(~"100vw - 260px");
+        height: calc(~"100vh - 60px");
+        position: absolute;
+        top: 55px;
+        left: 250px;
+    }
+
+    app {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        margin-right: 0;
+    }
+
+    .main .top-row {
+        position: sticky;
+        top: 0;
+    }
+
+    .main > div {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+
+    .navbar-toggler {
+        display: none;
+    }
+
+    .sidebar .collapse {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+    }
+    
+}
+
+    /*my own code*/
+@media (min-width: 1200px) and (max-width:1480px)
+{
+    .fontSize
+    {
+        font-size:18px !important;
+    }
+    select {
+        font-size: 90% !important;
+    }
+    td {
+        font-size: 14px !important;
+    }
+   
+}
+
+@media (min-width: 900px) and (max-width:1480px)
+{
+    .weekdays {
+        font-size: 80% !important;
+    }
+
+    .days {
+        font-size: 80% !important;
+    }
+}
+
+@media (max-width:530px) {
+    .weekdays {
+        font-size: 80% !important;
+    }
+
+    .days {
+        font-size: 80% !important;
+    }
+}
+
+@media (max-width:991px) {
+    #photo {
+        align-content: center !important;
+    }
+    #line1{
+        width:25px;
+        height:75px;
+    }
+    #line {
+        width: 0 !important;
+        height: 0 !important;
+        border: 0px !important;
+    }
+
+}
+
+@media (min-width: 440px) and (max-width:650px)
+{
+    .fontSize {
+        font-size: 16px !important;
+    }
+
+    select {
+        font-size: 80% !important;
+    }
+
+    td {
+        font-size: 14px !important;
+    }
+}
+
+/* Split the screen in half */
+/*Calendar*/
+ul {
+    list-style-type: none;
+}
+
+    body {
+        font-family: Verdana, sans-serif;
+    }
+
+    /* Month header */
+    .month {
+        padding: 25px 25px;
+        width: 100%;
+        background: #1abc9c;
+        text-align: center;
+    }
+
+        /* Month list */
+        .month ul {
+            margin: 0;
+            padding: 0;
+        }
+
+            .month ul li {
+                color: white;
+                font-size: 20px;
+                text-transform: uppercase;
+                letter-spacing: 3px;
+            }
+
+        /* Previous button inside month header */
+        .month .prev {
+            float: left;
+            padding-top: 10px;
+        }
+
+        /* Next button */
+        .month .next {
+            float: right;
+            padding-top: 10px;
+        }
+
+    /* Weekdays (Mon-Sun) */
+    .weekdays {
+        margin: 0;
+        padding: 10px 0;
+        background-color: #ddd;
+    }
+
+        .weekdays li {
+            display: inline-block;
+            width: 13%;
+            color: #666;
+            text-align: center;
+        }
+
+    /* Days (1-31) */
+    .days {
+        padding: 10px 0 10px 0;
+        background: #eee;
+        margin: 0;
+    }
+
+        .days li {
+            list-style-type: none;
+            display: inline-block;
+            width: 13%;
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 20px;
+            color: #777;
+        }
+
+            /* Highlight the "current" day */
+            .days li .active {
+                padding: 5px;
+                background: #1abc9c;
+                color: white !important
+            }
+
+
+    /*combobox*/
+    select {
+        width: 100%;
+        height: 50px;
+        font-size: 100%;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 0;
+        background-color: #1abc9c;
+        border: none;
+        border-bottom: 2px solid #962d22;
+        color: white;
+        padding: 10px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        padding: 10px;
+        apperance: none;
+    }
+        /* For IE <= 11 */
+        select::-ms-expand {
+            display: none;
+        }
+
+
+
+    /*button print*/
+
+    button.print-button {
+        width: 100px;
+        height: 100px;
+    }
+
+        span.print-icon, span.print-icon::before, span.print-icon::after, button.print-button:hover .print-icon::after {
+            border: solid 4px #1abc9c;
+        }
+
+            span.print-icon::after {
+                border-width: 2px;
+            }
+
+    button.print-button {
+        position: relative;
+        padding: 0;
+        border: 0;
+        border: none;
+        background: transparent;
+    }
+
+        span.print-icon, span.print-icon::before, span.print-icon::after, button.print-button:hover .print-icon::after {
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+
+    span.print-icon {
+        position: relative;
+        display: inline-block;
+        padding: 0;
+        margin-top: 20%;
+        width: 60%;
+        height: 35%;
+        background: #fff;
+        border-radius: 20% 20% 0 0;
+    }
+
+        span.print-icon::before {
+            content: " ";
+            position: absolute;
+            bottom: 100%;
+            left: 12%;
+            right: 12%;
+            height: 110%;
+            transition: height .2s .15s;
+        }
+
+        span.print-icon::after {
+            content: " ";
+            position: absolute;
+            top: 55%;
+            left: 12%;
+            right: 12%;
+            height: 0%;
+            background: #fff;
+            background-repeat: no-repeat;
+            background-size: 70% 90%;
+            background-position: center;
+            background-image: linear-gradient( to top, #fff 0, #fff 14%, #333 14%, #333 28%, #fff 28%, #fff 42%, #333 42%, #333 56%, #fff 56%, #fff 70%, #333 70%, #333 84%, #fff 84%, #fff 100% );
+            transition: height .2s, border-width 0s .2s, width 0s .2s;
+        }
+
+    button.print-button:hover {
+        cursor: pointer;
+    }
+
+        button.print-button:hover .print-icon::before {
+            height: 0px;
+            transition: height .2s;
+        }
+
+        button.print-button:hover .print-icon::after {
+            height: 120%;
+            transition: height .2s .15s, border-width 0s .16s;
+        }
+
+    /*Calendar*/
+
+
+    .calendar {
+        padding-top: 5px;
+        width: 80px;
+        background: #ededef;
+        background: -webkit-gradient(linear, left top, left bottom, from(#ededef), to(#ccc));
+        background: -moz-linear-gradient(top, #ededef, #ccc);
+        font: bold 30px/60px "Lucida Sans Unicode", Arial Black, Arial, Helvetica, sans-serif;
+        text-align: center;
+        color: #1abc9c;
+        text-shadow: #fff 0 1px 0;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        position: absolute;
+        -moz-box-shadow: 0 2px 2px #888;
+        -webkit-box-shadow: 0 2px 2px #888;
+        box-shadow: 0 2px 2px #888;
+    }
+
+        .calendar em {
+            display: block;
+            font: 10px/30px "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+            color: #fff;
+            text-shadow: #00365a 0 -1px 0;
+            background: #1abc9c;
+            background: -webkit-gradient(linear, left top, left bottom, from(#1abc9c), to(#00365a));
+            background: -moz-linear-gradient(top, #1abc9c, #00365a);
+            -moz-border-radius-bottomright: 3px;
+            -webkit-border-bottom-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+            -moz-border-radius-bottomleft: 3px;
+            -webkit-border-bottom-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+            border-top: 1px solid #00365a;
+        }
+
+        .calendar:before, .calendar:after {
+            content: '';
+            float: left;
+            position: absolute;
+            top: 5px;
+            width: 8px;
+            height: 8px;
+            background: #111;
+            z-index: 1;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            -moz-box-shadow: 0 1px 1px #fff;
+            -webkit-box-shadow: 0 1px 1px #fff;
+            box-shadow: 0 1px 1px #fff;
+        }
+
+        .calendar:before {
+            left: 11px;
+        }
+
+        .calendar:after {
+            right: 11px;
+        }
+
+        .calendar em:before, .calendar em:after {
+            content: '';
+            float: left;
+            position: absolute;
+            top: -5px;
+            width: 4px;
+            height: 14px;
+            background: #dadada;
+            background: -webkit-gradient(linear, left top, left bottom, from(#f1f1f1), to(#aaa));
+            background: -moz-linear-gradient(top, #f1f1f1, #aaa);
+            z-index: 2;
+            -moz-border-radius: 2px;
+            -webkit-border-radius: 2px;
+            border-radius: 2px;
+        }
+
+        .calendar em:before {
+            left: 13px;
+        }
+
+        .calendar em:after {
+            right: 13px;
+        }
+
+        .calendar:hover {
+            box-shadow: 5px 10px #1abc9c;
+        }
+
+    /*table*/
+    #sections {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+.active2 {
+    background-color: crimson !important;
+}
+        #sections td, #sections th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #sections tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #sections tr {
+            background-color: darkkhaki;
+        }
+
+            #sections tr:hover {
+                background-color: #ddd;
+                cursor:pointer;
+            }
+
+        #sections th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: crimson;
+            color: white;
+        }
+
+    /* Style buttons */
+    .btns {
+        background-color: crimson; /* Blue background */
+        border: none; /* Remove borders */
+        color: white; /* White text */
+        padding: 12px 16px; /* Some padding */
+        font-size: 24px; /* Set a font size */
+        cursor: pointer; /* Mouse pointer on hover */
+    }
+
+        /* Darker background on mouse-over */
+        .btns:hover {
+            background-color: white;
+            color: black;
+        }
+
+    #dodaj {
+        border: none; /* Remove borders */
+        color: crimson; /* White text */
+        font-size: 36px; /* Set a font size */
+        cursor: pointer; /* Mouse pointer on hover */
+    }
+
+    #dodaj {
+        font-size: 36px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+        #dodaj:hover {
+            color: cyan;
+        }
+
+#editdelete {
+    border: none; /* Remove borders */
+    color: black; /* White text */
+    font-size: 24px; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+}
+
+#editdelete {
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
+}
+
+    #editdelete:hover {
+        color: cyan;
+    }
+
+#pracownik {
+    color: #660066;
+    font: bold;
+    text-align: center;
+    text-shadow: 4px -5px 6px #ffffff;
+}
+
+.pracownik {
+    display:inline-block !important; 
+    box-sizing:border-box !important;
+}
+
+.pracownik > label{
+    text-align:center;
+    color:aqua;
+    letter-spacing: 1px;
+}
+
+    .pracownik > input {
+        background-color: darksalmon;
+        border-radius: 15px;
+        box-shadow: 5px 10px 18px #660066;
+        color: #660066;
+        font:bold;
+        text-transform:uppercase;
+        text-align:center;
+        outline-style:none;
+    }
+#checkK {
+    width: 25px;
+    height: 25px;
+    background-color: darksalmon;
+    color: #660066;
+}
+
+.pracownik > button {
+    color: darksalmon;
+    background-color: #660066;
+    border-radius: 25px;
+    outline-style: none;
+}
+.autor{
+    float:right;
+}
+
+#dzial{
+    width:100%;
+}
+
+.container{
+    display:inline-block;
+}
+@media (min-width: 440px) and (max-width:990px)
+{
+    .pracownik > label{
+        margin:15px;
+    }
+    #dzial {
+        width: auto;
+    }
+    .pracownik > input {
+        font-size: 14px;
+        margin: 15px;
+    }
+   
+}
+
+@media (min-width: 440px) and (max-width:1200px) {
+    #swieta {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: 100%;
+        height: 100%;
+        background-color: darkorange;
+    }
+}
+
+    @media (min-width: 1200px) {
+        #swieta {
+            background-color: darkorange;
+            position: absolute;
+            left: 250px;
+            top: 55px;
+            width: 83%;
+            height: auto;
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    body {
+        box-sizing: content-box;
+        background-image: linear-gradient(to bottom right, #05163d, #4B0082);
+        padding: 0 0 0 0;
+        margin: 0 0 0 0;
+    }
+
+    #headerSwieta {
+        color: crimson;
+        font: bold;
+        text-align: center;
+        text-shadow: 4px -5px 6px #ffffff;
+        padding:30px;
+    }
+#line {
+    border: 10px solid #663166;
+    height: 525px;
+    width: 0px;
+    border-radius: 20px;
+}
+
+.rotate {
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
+}
+@-webkit-keyframes spin{
+    100%{-webkit-transform: rotate(360deg);}
+}
+
+@-moz-keyframes spin{
+    100% {-webkit-transform: rotate(360deg);}
+}
+ @keyframes spin{
+    100% {-webkit-transform: rotate(360deg);}
+ }
+
+
+}

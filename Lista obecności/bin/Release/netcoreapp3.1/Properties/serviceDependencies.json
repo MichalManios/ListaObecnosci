@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "sql": {
+      "type": "sql",
+      "connectionId": "DefaultConnection"
+    }
+  }
+}

@@ -1,0 +1,232 @@
+﻿@page "/"
+@namespace Lista_obecności.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Lista obecności</title>
+    <base href="~/" />
+
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    
+</head>
+<body>
+    <app>
+        <component type="typeof(App)" render-mode="ServerPrerendered" />
+    </app>
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="_framework/blazor.server.js"></script>
+
+    <script>
+        function ChangeIcon(x) {
+            x.classList.toggle("fa-lock-open");
+            if (x.classList.contains("fa-lock-open")) x.title = "Drukuj wszystkie działy.";
+            else x.title = "Drukuj tylko wybrany dział.";
+        }
+    </script>
+
+   
+
+    <script>
+        function setCalendarMonth(element) {
+            var p = document.getElementById('P').value;
+            var pp = new Array(30);
+            for (var i = 0; i < p; i++)
+            {
+                pp[i] = document.getElementById('P'+i).value;
+            }
+            for (var i = 0; i < pp.length; i++) {
+                var l = l + pp[i];
+            }
+            alert(l);
+            var Month = element.options[element.selectedIndex].text;
+            document.getElementById("printMonth").textContent = Month;
+            var calendar = document.getElementById("days").getElementsByTagName("li");
+            var Month2 = element.selectedIndex +1;
+            var daysInMonth = maxday(Month2, document.getElementById("Year").options[document.getElementById("Year").selectedIndex].text);
+            var sDayOfWeek = new Date(document.getElementById("Year").options[document.getElementById("Year").selectedIndex].text, element.selectedIndex, 1).getDay();
+            var iStartDating = 0;
+
+            if (sDayOfWeek == 1) iStartDating = 1;
+            if (sDayOfWeek == 2) iStartDating = 2;
+            if (sDayOfWeek == 3) iStartDating = 3;
+            if (sDayOfWeek == 4) iStartDating = 4;
+            if (sDayOfWeek == 5) iStartDating = 5;
+            if (sDayOfWeek == 6) iStartDating = 6;
+            if (sDayOfWeek == 0) iStartDating = 7;
+            var x = 1;
+            var s = 0;
+
+            for (var i = 1; i < 42; i++)
+            {
+                s++;
+                if (iStartDating <= i && x <= daysInMonth)
+                {
+                    calendar[i - 1].innerText = x;
+                    if (s == 6 || s == 7) calendar[i - 1].style.color = "red";
+
+                    x++;
+                }
+                else {
+                    calendar[i-1].innerText = " ";
+                }
+
+                if (s == 7) s = 0;
+            }
+
+        }
+        function maxday(month, year) {
+            var ndays;
+            if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) ndays = 31;
+            else if (month == 4 || month == 6 || month == 9 || month == 11) ndays = 30;
+            else {
+                if (year % 4 != 0) ndays = 28;
+                if (year % 4 == 0) {
+                    if (year % 100 == 0 && year % 400 != 0) ndays = 28;
+                    else ndays = 29;
+                }
+
+            }
+            return ndays;
+        }
+
+    </script>
+
+    <script>
+        function setCalendarYear(element) {
+            var Year = element.options[element.selectedIndex].text;
+            document.getElementById("printYear").textContent = Year;
+            var calendar = document.getElementById("days").getElementsByTagName("li");
+            var daysInMonth = maxday(document.getElementById("Month").selectedIndex+1, Year);
+            var sDayOfWeek = new Date(Year, document.getElementById("Month").selectedIndex, 1).getDay();
+            var iStartDating = 0;
+
+            if (sDayOfWeek == 1) iStartDating = 1;
+            if (sDayOfWeek == 2) iStartDating = 2;
+            if (sDayOfWeek == 3) iStartDating = 3;
+            if (sDayOfWeek == 4) iStartDating = 4;
+            if (sDayOfWeek == 5) iStartDating = 5;
+            if (sDayOfWeek == 6) iStartDating = 6;
+            if (sDayOfWeek == 0) iStartDating = 7;
+            var x = 1;
+
+            for (var i = 1; i < 42; i++) {
+                if (iStartDating <= i && x <= daysInMonth) {
+
+                    calendar[i - 1].innerText = x;
+
+                    x++;
+                }
+                else {
+                    calendar[i - 1].innerText = " ";
+                }
+            }
+
+        }
+        function maxday(month, year) {
+            var ndays;
+            if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) ndays = 31;
+            else if (month == 4 || month == 6 || month == 9 || month == 11) ndays = 30;
+            else {
+                if (year % 4 != 0) ndays = 28;
+                if (year % 4 == 0) {
+                    if (year % 100 == 0 && year % 400 != 0) ndays = 28;
+                    else ndays = 29;
+                }
+
+            }
+            return ndays;
+        }
+        
+    </script>
+
+    <script>
+        function loadMsg(e) {
+            $('.msgRow').closest('tr').css('background-color', 'none');
+
+            $('.msgRow').css('background-color', 'none');
+
+            $(e).closest('tr').css('background-color', 'green');
+            $(e).css('background-color', 'aqua');
+        }
+    </script>
+
+    <script type="text/javascript">
+
+        var selectedClass = 'active2';
+        var selectedRow = null;
+        function selectRow(row) {
+            clearSelection();
+            row.className += " " + selectedClass;
+            selectedRow = row;
+        }
+        function clearSelection() {
+            var reg = new RegExp('(\\s|^)' + selectedClass + '(\\s|$)');
+            if (selectedRow != null) selectedRow.className = selectedRow.className.replace(reg, ' ');
+        }
+
+    </script>
+
+    <script>
+        function updateClock() {
+
+            var currentTime = new Date();
+
+            var currentHours = currentTime.getHours();
+            var currentMinutes = currentTime.getMinutes();
+            var currentSeconds = currentTime.getSeconds();
+            var currentDay = currentTime.getDay();
+            var currentMonth = currentTime.getMonth();
+
+            // Pad the minutes and seconds with leading zeros, if required
+            currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
+            currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+
+            // Choose either "AM" or "PM" as appropriate
+            var timeOfDay = (currentHours < 12) ? "AM" : "PM";
+
+            // Convert the hours component to 12-hour format if needed
+            currentHours = (currentHours > 12) ? currentHours - 12 : currentHours;
+
+            // Convert an hours component of "0" to "12"
+            currentHours = (currentHours == 0) ? 12 : currentHours;
+
+            // Compose the string for display
+            var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+
+            return currentTimeString;
+        }
+
+        function DiplayClock() {
+            var currentTime = updateClock();
+            var clock = document.getElementById("clock");
+            if(clock!=null)
+            document.getElementById("clock").firstChild.nodeValue = currentTime;
+        }
+    </script>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>

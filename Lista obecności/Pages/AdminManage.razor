@@ -1,0 +1,365 @@
+﻿
+@page "/AdminManage"
+
+@using Lista_obecności.Data
+@using Lista_obecności.DTO
+@using Lista_obecności
+
+@using Lista_obecności
+@using Microsoft.AspNetCore.Identity
+@using System.Threading.Tasks
+
+@using System.IO;
+@using System.Runtime.Serialization.Formatters.Binary;
+@using System.Globalization;
+
+
+@inject UserManager<IdentityUser> userManager
+
+
+@inject IApplicationManager iApplicationManager
+@inject NavigationManager navigationManager
+@inject RoleManager<IdentityRole> roleManager
+
+
+
+<section class="p-0 m-0 col-12">
+    <div class="container p-0 m-0 col-12">
+
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+        <div class="col-12"><br /></div>
+
+
+        <header id="pracownik" class="h1"> Ustawienia konta: </header>
+
+        <div class="row col-12">
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+            <div class="col-12"><br /></div>
+
+
+            <div class="col-lg-9" style="text-align:center;">
+                <div class="col-md-3 col-sm-6 pracownik " style="display:inline-block;">
+                    <label>
+                        Znajdź użytkownika:
+                    </label>
+                </div>
+
+                <div class="col-md-3 col-sm-4 pracownik" style="display:inline-block;">
+                    <input type="text" oninput="this.value=this.value.toUpperCase()" @bind="sUser" placeholder="UŻYTKOWNIK" />
+                </div>
+
+                <div class="col-md-3 offset-md-1 offset-0 col-8 pracownik" style="display:inline-block;">
+                    <button @onclick="@FindUser" type="submit" class="col-12">
+                        Znajdź
+                    </button>
+                </div>
+
+                @if (bAlert == true)
+                {
+                    <div class="col-12"> <span class="text-danger">@sAlert</span></div>
+                }
+                else
+                {
+                    <div class="col-12"><br /></div>
+                }
+
+                <div class="col-12"><br /></div>
+                <div class="col-12"><br /></div>
+
+
+                <div class="col-md-3 col-sm-4 pracownik" style="display:inline-block;">
+                    <label>
+                        Użytkownik:
+                    </label>
+                </div>
+
+                <div class="col-md-3 col-sm-4 pracownik" style="display:inline-block;">
+                    <label>
+                        Rola:
+                    </label>
+                </div>
+
+                <div class="col-3"> </div>
+
+                <div class="col-mg-3 col-sm-4 pracownik" style="display:inline-block;">
+                    <input type="text" readonly oninput="this.value=this.value.toUpperCase()" @bind-value="sUserName" placeholder="UŻYTKOWNIK" />
+                </div>
+
+                <div class="col-md-3 col-sm-4 offset-0 offset-sm-1 offset-md-0 pracownik" style="display:inline-block;">
+                    <input type="text" readonly oninput="this.value=this.value.toUpperCase()" @bind-value="sUserRole" placeholder="ROLA" />
+                </div>
+
+                <div class="col-12"><br /></div>
+                <div class="col-12"><br /></div>
+
+
+                <div class="col-md-4 col-8 pracownik" style="display:inline-block;">
+                    <button @onclick="@SetRola" type="submit" class="col-12">
+                        Zmień Rolę użytkownika
+                    </button>
+                </div>
+
+                <div class="col-md-4 col-8  pracownik">
+                    <button @onclick="SetPassword" type="submit" class="col-12" style="display:inline-block;">
+                        Zmień hasło użytkownika
+                    </button>
+                </div>
+                @if (bMustBeAUser == false && bClick == true)
+                {
+                    <div class="col-12"> <span class="text-danger">Musi być wybrany użytkownik!!!</span></div>
+                }
+                else
+                {
+                    <div class="col-12"><br /></div>
+                }
+                <div class="col-12"><br /></div>
+                <div class="col-12"><br /></div>
+
+
+                @if (bRola == true && bAnyChanges == true)
+                {
+                    <div class="col-md-4 col-8  pracownik" style="position:relative;">
+                        <select @onchange="@SetRole" class="select pracownik" style="
+                                    border-radius:15px;
+                                    background-color:#660066;
+                                    color:darksalmon;
+                                     text-align-last:center;
+                                     -webkit-appearance: none;
+                                     -moz-appearance: none;">
+                            >
+
+                            <option value=0>@role.Guest</option>
+                            <option value=1>@role.User</option>
+                            <option value=2>@role.Admin</option>
+
+                        </select>
+                        <div style="background-color:#CC0033; height:100%; width:30px; position:absolute; top:0; right:15px; font-size:30px; border-bottom-right-radius:10px; border-top-right-radius:10px; font:bold; color:darksalmon;">\/</div>
+                    </div>
+
+                    <div class="col-md-4 col-8  pracownik">
+                        <button @onclick="ChangeRole" type="submit" class="col-12" style="display:inline-block;">
+                            Zatwierdź zmianę
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12"><br /> </div>
+                    <div class="col-12"><br /> </div>
+                    <div class="col-12"><br /> </div>
+                }
+
+                <div class="col-3"> </div>
+                <div class="col-12"><br /> </div>
+
+                @if (bPassword == true && bAnyChanges == true)
+                {
+                    <div class="col-md-3 col-sm-4 pracownik" style="display:inline-block;">
+                        <label>
+                            Mowe hasło:
+                        </label>
+                    </div>
+
+                    <div class="col-md-3 col-sm-4 pracownik" style="display:inline-block;">
+                        <input type="password" @bind="sPasswordToChange" placeholder="NOWE HASŁO" />
+                    </div>
+
+                    <div class="col-3"> </div>
+                    <div class="col-12"><br /> </div>
+
+                    <div class="col-md-4 col-8  pracownik">
+                        <button @onclick="ChangePassword" type="submit" class="col-12" style="display:inline-block;">
+                            Zmień hasło
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12"><br /> </div>
+                    <div class="col-12"><br /> </div>
+                    <div class="col-12"><br /> </div>
+                    <div class="col-12"><br /> </div>
+                }
+
+
+
+            </div>
+
+            <div class="col-lg-3" style="text-align:center;">
+                @if (bBase == false)
+                {
+                    <div class="pracownik">
+                        <button @onclick="LoadBase" type="submit" class="col-12" style="display:inline-block;">
+                            Załaduj dane ze starej bazy
+                        </button>
+                    </div>
+                    <div class="col-12"><br /> </div>
+                }
+                <img class="rotate" src="/Images/set.png" asp-append-version="true" width="300" style="display:inline-block" />
+            </div>
+        </div>
+
+        <div class="col-12 m-0 p-0" style="display:inline-block; position:absolute; right:0; text-align:right;">
+            <p><label class="col-12" style="font-family: Cambria; color: white; text-shadow: 2px 2px 4px #000000; position:relative;">Autor: Michał Manios</label></p>
+            <p><label class="col-12" style="letter-spacing: 1px; font-family: Cambria; color: white; text-shadow: 2px 2px 4px #000000; position:relative;">Wersja: 1.0</label></p>
+        </div>
+
+    </div>
+</section>
+
+
+@code {
+    public bool bRola = false;
+    public bool bPassword = false;
+    Roles role = new Roles();
+    public string sUser = "";
+    IdentityUser User = new IdentityUser();
+    public string sUserName = "";
+    public string sUserRole = "";
+    public string sUserRoleToChange = "";
+    public string sPasswordToChange = "";
+    string sAlert = "";
+    bool bAlert = false;
+    bool bAnyChanges = false;
+    bool bMustBeAUser = false;
+    bool bClick = false;
+    bool bBase = false;
+
+    protected override void OnInitialized()
+    {
+        sUser = "";
+        sUserName = "";
+        sUserRole = "";
+        sAlert = "";
+        sUserRoleToChange = "";
+        sPasswordToChange = "";
+        var worker = iApplicationManager.GetAllWorkers(null).ToList();
+        if (worker.Count == 0) bBase = false;
+        else bBase = true;
+        worker = null;
+    }
+
+    void SetRola()
+    {
+        bRola = true;
+        bPassword = false;
+        bClick = true;
+    }
+
+    void SetPassword()
+    {
+        bPassword = true;
+        bRola = false;
+        bClick = true;
+    }
+
+    async Task FindUser()
+    {
+        var UserToFind = await userManager.FindByNameAsync(sUser);
+
+        if (UserToFind != null)
+        {
+            User = UserToFind;
+            sUserName = UserToFind.UserName;
+            var roleId = await userManager.GetRolesAsync(UserToFind);
+            sUserRole = roleId[0];
+            bAlert = false;
+            bAnyChanges = true;
+            bPassword = false;
+            bRola = false;
+            bMustBeAUser = true;
+        }
+        else
+        {
+            User = null;
+            sUserName = "";
+            sUserRole = "";
+            bAnyChanges = false;
+            bMustBeAUser = false;
+            bAlert = true;
+            sAlert = "Nie znaleziono użytkownika o nazwie: " + sUser + "!!!";
+        }
+        sUser = "";
+    }
+
+    async Task ChangeRole()
+    {
+        if (sUserRoleToChange != sUserRole)
+        {
+            var RoleResult = await roleManager.FindByNameAsync(sUserRoleToChange);
+            if (RoleResult == null)
+            {
+                // Create
+                await roleManager.CreateAsync(new IdentityRole(sUserRoleToChange));
+            }
+            await userManager.RemoveFromRoleAsync(User, sUserRole);
+            await userManager.AddToRoleAsync(User, sUserRoleToChange);
+            User = null;
+            sUserName = "";
+            sUserRole = "";
+            bAnyChanges = false;
+            bMustBeAUser = false;
+            navigationManager.NavigateTo("/AdminManage", true);
+        }
+    }
+
+    async Task ChangePassword()
+    {
+        //var currentPassword = userManager.PasswordHasher;
+        //await userManager.ChangePasswordAsync(User, User., sPasswordToChange);
+        var user = await userManager.FindByNameAsync(sUserName);
+        if (user != null)
+        {
+            user.PasswordHash = userManager.PasswordHasher.HashPassword(user, sPasswordToChange);
+            var result = await userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                User = null;
+                sUserName = "";
+                sUserRole = "";
+                bAnyChanges = false;
+                bMustBeAUser = false;
+                navigationManager.NavigateTo("/AdminManage", true);
+            }
+        }
+    }
+
+    void SetRole(ChangeEventArgs e)
+    {
+        var index = e.Value.ToString();
+        if (index == "0") sUserRoleToChange = "guest";
+        if (index == "1") sUserRoleToChange = "user";
+        if (index == "2") sUserRoleToChange = "admin";
+    }
+
+    void LoadBase()
+    {
+        ListOfWorkers listOfWorkers = new ListOfWorkers();
+        string workersPath = Environment.CurrentDirectory + "\\List_of_workers.dat";
+        if (File.Exists(workersPath))
+        {
+            using (Stream input = File.OpenRead("List_of_workers.dat"))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                listOfWorkers = (ListOfWorkers)formatter.Deserialize(input);
+            }
+        }
+
+        for (int i = 0; i < listOfWorkers.Id.Count; i++)
+        {
+            WorkersDTO worker = new WorkersDTO()
+            {
+                Id = listOfWorkers.Id[i],
+                Name = listOfWorkers.Imie[i],
+                Surname = listOfWorkers.Nazwisko[i],
+                Section = listOfWorkers.Dzial[i],
+                IsManager = false
+            };
+            iApplicationManager.AddNewWorker(worker);
+        }
+    }
+}
